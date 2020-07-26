@@ -32,7 +32,9 @@
         class:selected={index === selected}
         on:click={onClick}
         value={index}>
-        {day}
+        {index === todayNumber ? `${dayjs().format('DD')} ${day}` : `${dayjs()
+              .add(index - todayNumber, 'day')
+              .format('DD')} ${day}`}
       </li>
     {/each}
   </ul>
@@ -62,24 +64,16 @@
     text-transform: uppercase;
     width: 3em;
     height: 3em;
-    line-height: 3em;
+    line-height: 1.1em;
     border: solid 1px transparent;
     font-size: 1em;
+    word-spacing: 5em;
   }
 
   li:hover {
     cursor: pointer;
   }
 
-  /* subscript doesnnt work that ncie on mobile 
-  .today:before {
-    content: 'today';
-    vertical-align: super;
-    position: absolute;
-    font-size: 0.3em;
-    font-weight: 400;
-  }
-  */
   .today {
     font-weight: 700;
   }

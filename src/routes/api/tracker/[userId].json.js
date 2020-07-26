@@ -1,4 +1,4 @@
-import { db } from '../../../database.js';
+import { db } from "../../../database.js";
 
 export async function get(req, res, next) {
   const { userId } = req.params;
@@ -13,11 +13,12 @@ export async function get(req, res, next) {
   activity.unit
   FROM tracker INNER JOIN activity ON (tracker.activity_id = activity.id)
   WHERE user_id = ${userId}
+  ORDER BY tracker.added DESC
   `;
   try {
     const data = await db(sql);
     res.writeHead(200, {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     });
     res.end(
       JSON.stringify({
@@ -26,11 +27,11 @@ export async function get(req, res, next) {
     );
   } catch {
     res.writeHead(404, {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     });
     res.end(
       JSON.stringify({
-        message: 'Not found',
+        message: "Not found",
       })
     );
   }

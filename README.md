@@ -1,6 +1,6 @@
 ### todo
 
-- [] group activities together
+- [x] group activities together
 - [] authorisation for backend (polka middleware?)
 - [] style/animations
 - [] find online service

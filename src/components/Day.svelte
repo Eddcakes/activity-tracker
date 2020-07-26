@@ -1,5 +1,6 @@
 <script>
   import { onMount, createEventDispatcher } from "svelte";
+  import Grouper from "./Grouper.svelte";
   import dayjs from "dayjs";
   export let isToday;
   export let todaysActivities;
@@ -30,7 +31,6 @@
   //how svelte doesnt seem to update the control, what am i doing wrong here
   async function handleAdd() {
     posting = true;
-    console.log(`reps: ${reps}, selected: ${selectedActivity}`);
     const settings = {
       method: "POST",
       headers: {
@@ -66,49 +66,68 @@
       update: "new item",
     });
   }
+
+  function groupForItem(item) {
+    return item.label;
+  }
 </script>
 
+{#if todaysActivities.length > 0}
+  <Grouper items={todaysActivities} {groupForItem} let:group let:item>
+    <div slot="group">
+      <div class="caption">
+        <div>{dayjs(date).format('DD/MM/YYYY')}</div>
+        <div>{group}s</div>
+        <div>Total: {total}</div>
+      </div>
+    </div>
+    <tr slot="item" class="count">
+      <td>{item.quantity}</td>
+      <td>{dayjs(item.added).format('h:mm:ss A')}</td>
+    </tr>
+  </Grouper>
+{:else}
+  <div>No activities 👟</div>
+{/if}
 <div>
-  {dayjs(date).format('DD/MM/YYYY')} - Total: {total}
-  <div>
-    {#if todaysActivities.length > 0}
-      {#each todaysActivities as activity, index}
-        <div>
-          {index + 1} | {activity.quantity} {activity.label}s {dayjs(activity.added).format('h:mm:ss A')}
-        </div>
-      {/each}
-    {:else}
-      <div>No activities 👟</div>
-    {/if}
-  </div>
+
   {#if isToday}
     <div class="update-activity-bar {posting ? 'disabled' : ''}">
-      <input inputmode="decimal" min="1" bind:value={reps} />
-      <select bind:value={selectedActivity}>
-        {#each activities as activity (activity.id)}
-          <option value={activity.id}>{activity.label}</option>
-        {/each}
-      </select>
-      <button on:click={handleAdd} disabled={posting}>add</button>
+      <div class="input">
+        <input inputmode="decimal" min="1" bind:value={reps} />
+      </div>
+      <div class="select">
+        <select bind:value={selectedActivity}>
+          {#each activities as activity (activity.id)}
+            <option value={activity.id}>{activity.label}</option>
+          {/each}
+        </select>
+      </div>
+      <div class="button">
+        <button on:click={handleAdd} disabled={posting}>add</button>
+      </div>
     </div>
   {/if}
 </div>
 
 <style>
   .update-activity-bar {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 1fr;
     height: 4em;
     border: 2px solid green;
     border-radius: 50px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   }
 
   .update-activity-bar.disabled {
     background-color: grey;
   }
-  /* hmm why didnt flex grow work nicely */
-  .update-activity-bar input {
-    width: 20%;
+
+  .input input {
+    width: 100%;
+    height: 100%;
     font-size: 1.5em;
     border: 0;
     border-radius: 50px 0 0 50px;
@@ -118,21 +137,57 @@
     background-color: greenyellow;
   }
 
-  .update-activity-bar select {
-    width: 50%;
-    font-size: 1.5em;
-    border: 0;
+  .select select {
+    width: 100%;
+    height: 100%;
     background-color: greenyellow;
     text-transform: capitalize;
+    font-size: 1.5em;
+    border: 0;
   }
 
-  .update-activity-bar button {
-    width: 30%;
+  .button button {
+    width: 100%;
+    height: 100%;
     font-size: 1.5em;
     border-radius: 0 50px 50px 0;
   }
 
+  .caption {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    padding: 1em;
+    border-radius: 0.25em;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin: auto;
+    max-width: 50%;
+  }
+
+  .caption:hover {
+    background-color: #a0a0a0;
+    cursor: pointer;
+  }
+
   button {
     text-transform: uppercase;
+  }
+
+  tr {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  /* Grouper component has rowNumber counter reset */
+  tr::before {
+    display: table-cell;
+    counter-increment: rowNumber;
+    content: counter(rowNumber);
+    padding-right: 1em;
+    padding-left: 1em;
+  }
+
+  td {
+    padding-left: 1em;
+    padding-right: 1em;
   }
 </style>
