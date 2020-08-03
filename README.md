@@ -1,11 +1,11 @@
 ### todo
 
 - [x] group activities together
-- [] authorisation for backend (polka middleware?)
-- [] style/animations
-- [] find online service
-- [] swipe to go back in time
-- [] make the postgres docker instead of local - easier to host i suppose
+- [ ] authorisation for backend (polka middleware?)
+- [ ] style/animations
+- [ ] find online service
+- [ ] swipe to go back in time
+- [x] using google cloud for the postgres db ~~make the postgres docker instead of local - easier to host i suppose~~
 
 ### sapper-template
 

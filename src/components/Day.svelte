@@ -28,7 +28,7 @@
     (acc, current) => (acc += current.quantity),
     0
   );
-  //how svelte doesnt seem to update the control, what am i doing wrong here
+
   async function handleAdd() {
     posting = true;
     const settings = {
@@ -83,6 +83,7 @@
     </div>
     <tr slot="item" class="count">
       <td>{item.quantity}</td>
+      <td>{item.label}</td>
       <td>{dayjs(item.added).format('h:mm:ss A')}</td>
     </tr>
   </Grouper>
