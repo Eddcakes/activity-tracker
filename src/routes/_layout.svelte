@@ -1,10 +1,14 @@
 <script>
+  import Banner from "../components/Banner.svelte";
   import Nav from "../components/Nav.svelte";
 
   export let segment;
 </script>
 
-<Nav {segment} />
+<header>
+  <Banner />
+  <Nav {segment} />
+</header>
 
 <main>
   <slot />
