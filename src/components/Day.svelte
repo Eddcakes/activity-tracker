@@ -90,43 +90,64 @@
 {:else}
   <div>No activities 👟</div>
 {/if}
-<div>
 
-  {#if isToday}
-    <div class="update-activity-bar {posting ? 'disabled' : ''}">
-      <div class="input">
-        <input inputmode="decimal" min="1" bind:value={reps} />
+{#if isToday}
+  <div class="activity-bar-container">
+    <div class="activity-bar {posting ? 'disabled' : ''}">
+      <div>
+        <input
+          class="activity-bar-focus"
+          inputmode="decimal"
+          min="1"
+          bind:value={reps} />
       </div>
-      <div class="select">
-        <select bind:value={selectedActivity}>
+      <div>
+        <select class="activity-bar-focus" bind:value={selectedActivity}>
           {#each activities as activity (activity.id)}
             <option value={activity.id}>{activity.label}</option>
           {/each}
         </select>
       </div>
-      <div class="button">
-        <button on:click={handleAdd} disabled={posting}>add</button>
+      <div>
+        <button
+          class="activity-bar-focus"
+          on:click={handleAdd}
+          disabled={posting}>
+          add
+        </button>
       </div>
     </div>
-  {/if}
-</div>
+  </div>
+{/if}
 
 <style>
-  .update-activity-bar {
+  .activity-bar-container {
+    position: fixed;
+    left: 0;
+    bottom: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .activity-bar {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     grid-template-rows: 1fr;
     height: 4em;
-    border: 2px solid green;
+    border: 2px solid #ff5b05;
     border-radius: 50px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    /* box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); */
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    width: 70%;
   }
 
-  .update-activity-bar.disabled {
+  .activity-bar.disabled {
     background-color: grey;
   }
 
-  .input input {
+  input {
     width: 100%;
     height: 100%;
     font-size: 1.5em;
@@ -135,23 +156,39 @@
     text-align: right;
     box-sizing: border-box;
     padding-right: 0.3em;
-    background-color: greenyellow;
+    background-color: #ffecdb;
   }
 
-  .select select {
+  select {
     width: 100%;
     height: 100%;
-    background-color: greenyellow;
+    background-color: #ffecdb;
     text-transform: capitalize;
     font-size: 1.5em;
     border: 0;
   }
 
-  .button button {
+  button {
     width: 100%;
     height: 100%;
     font-size: 1.5em;
     border-radius: 0 50px 50px 0;
+    background-color: #ffecdb;
+    text-transform: uppercase;
+  }
+
+  button:hover {
+    background-color: #ffc394;
+  }
+
+  .activity-bar-focus:focus {
+    outline: none;
+    background-color: #ffc394;
+    box-shadow: 0 0 0 3px rgba(223, 74, 6, 0.5) !important;
+  }
+
+  button:active {
+    background-color: #ffa466;
   }
 
   .caption {
@@ -166,12 +203,8 @@
   }
 
   .caption:hover {
-    background-color: #a0a0a0;
+    background-color: #ffc394;
     cursor: pointer;
-  }
-
-  button {
-    text-transform: uppercase;
   }
 
   tr {
