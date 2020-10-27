@@ -15,7 +15,7 @@
 
   onMount(async () => {
     try {
-      const res = await fetch("api/activity");
+      const res = await fetch("api/activity.json");
       const data = await res.json();
       activities = data.message;
     } catch {
