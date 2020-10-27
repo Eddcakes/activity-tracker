@@ -13,8 +13,8 @@ const dev = mode === 'development';
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 
 const onwarn = (warning, onwarn) =>
-  (warning.code === 'CIRCULAR_DEPENDENCY' &&
-    /[/\\]@sapper[/\\]/.test(warning.message)) ||
+  (warning.code === 'MISSING_EXPORT' && /'preload'/.test(warning.message)) ||
+  (warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
   onwarn(warning);
 
 export default {
@@ -86,6 +86,7 @@ export default {
       }),
       svelte({
         generate: 'ssr',
+        hydratable: true,
         dev,
       }),
       resolve({
