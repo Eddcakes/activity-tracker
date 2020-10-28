@@ -142,7 +142,7 @@
     left: 0;
     bottom: 0;
     height: 5em;
-    box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.2);
     background-color: #fff5eb;
   }
 

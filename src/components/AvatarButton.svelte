@@ -6,6 +6,9 @@
   const toggleMenu = () => (isOpen = !isOpen);
 
   const closeMenu = () => (isOpen = false);
+
+  // this is pretty awesome 👀
+  $: if (process.browser) document.body.style.overflow = isOpen ? "hidden" : "";
 </script>
 
 <div class="avatar-container">
@@ -35,6 +38,7 @@
   .avatar-container {
     position: relative;
   }
+
   .avatar-btn {
     position: relative;
     width: 2.5rem;
