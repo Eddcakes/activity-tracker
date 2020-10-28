@@ -83,6 +83,7 @@
     padding-left: 0.4rem;
     transform: rotate(5deg);
   }
+
   .branding .bottom-text {
     padding-left: 1.8rem;
     transform: rotate(-4deg);
@@ -98,6 +99,14 @@
     padding-left: 0.2rem;
     width: 3rem;
     fill: #ffc394;
+    display: none;
+  }
+
+  /* on small screens banner stretches so remove one of the icons */
+  @media screen and (min-width: 330px) {
+    .placeholder-trail {
+      display: inline;
+    }
   }
 
   main {

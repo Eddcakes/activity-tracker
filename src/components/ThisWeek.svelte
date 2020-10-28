@@ -72,7 +72,30 @@
     padding: 0;
     list-style: none;
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: center;
     width: 100%;
+  }
+
+  /* mfw galaxy fold */
+  li {
+    margin-right: 0.1rem;
+    margin-left: 0.1rem;
+  }
+  @media screen and (min-width: 320px) {
+    li {
+      margin-right: 0.4rem;
+      margin-left: 0.4rem;
+    }
+  }
+  @media screen and (min-width: 500px) {
+    ul {
+      flex-wrap: none;
+      justify-content: space-between;
+    }
+
+    li {
+      margin: 0;
+    }
   }
 </style>
