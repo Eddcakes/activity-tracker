@@ -1,13 +1,19 @@
 <script>
   import Day from "./Day.svelte";
   import dayjs from "dayjs";
+  import DateButton from "./DateButton.svelte";
   export let data;
   export let selected;
   export let todayNumber;
 
   const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-  const onClick = (evt) => (selected = evt.target.value);
-
+  const onClick = (evt) => {
+    selected = getValue(evt.target.id);
+  };
+  function getValue(id) {
+    const value = id.split("date-btn")[1];
+    return value;
+  }
   $: date = () => {
     //work out the date to pass to date component
     //can we do somethign with todayNumber and selected
@@ -24,20 +30,24 @@
   );
 </script>
 
-<div>
-  <ul>
-    {#each days as day, index}
-      <li
-        class:today={index === todayNumber}
-        class:selected={index === selected}
-        on:click={onClick}
-        value={index}>
-        {index === todayNumber ? `${dayjs().format('DD')} ${day}` : `${dayjs()
-              .add(index - todayNumber, 'day')
-              .format('DD')} ${day}`}
-      </li>
-    {/each}
-  </ul>
+<div class="container">
+  <div class="day-bar">
+    <ul>
+      {#each days as day, index}
+        <li>
+          <DateButton
+            handleClick={onClick}
+            {todayNumber}
+            {index}
+            current={selected}
+            text={index === todayNumber ? `${dayjs().format('DD')} ${day}` : `${dayjs()
+                  .add(index - todayNumber, 'day')
+                  .format('DD')} ${day}`} />
+        </li>
+      {/each}
+    </ul>
+  </div>
+
   <Day
     isToday={todayNumber === selected}
     todaysActivities={todaysData}
@@ -46,8 +56,13 @@
 </div>
 
 <style>
-  div {
+  .container {
     text-align: center;
+  }
+
+  .day-bar {
+    display: flex;
+    overflow-x: hidden;
   }
 
   ul {
@@ -56,31 +71,6 @@
     list-style: none;
     display: flex;
     justify-content: space-between;
-    user-select: none;
-  }
-
-  li {
-    margin: 0;
-    text-transform: uppercase;
-    width: 3em;
-    height: 3em;
-    line-height: 1.1em;
-    border: solid 1px transparent;
-    font-size: 1em;
-    word-spacing: 5em;
-  }
-
-  li:hover {
-    cursor: pointer;
-  }
-
-  .today {
-    font-weight: 700;
-  }
-  /* could we add a sliding animation for the highlight */
-  .selected {
-    background-color: aliceblue;
-    border: solid 1px aquamarine;
-    border-radius: 100%;
+    width: 100%;
   }
 </style>

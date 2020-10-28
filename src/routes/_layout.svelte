@@ -7,7 +7,7 @@
 
 <header>
   <div class="banner">
-    <div class="branding">
+    <a class="branding" href=".">
       <svg
         class="placeholder-logo"
         xmlns="http://www.w3.org/2000/svg"
@@ -24,8 +24,20 @@
         <span class="top-text">Activity</span>
         <span class="bottom-text">Tracker</span>
       </div>
-
-    </div>
+      <svg
+        class="placeholder-trail"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13
+          21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+      </svg>
+    </a>
 
     <div>
       <Nav {segment} />
@@ -55,6 +67,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
+    text-decoration: none;
   }
 
   .branding .name {
@@ -77,6 +91,12 @@
   .placeholder-logo {
     width: 3rem;
     transform: rotate(10deg);
+    fill: #ffc394;
+  }
+
+  .placeholder-trail {
+    padding-left: 0.2rem;
+    width: 3rem;
     fill: #ffc394;
   }
 

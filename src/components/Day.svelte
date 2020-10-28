@@ -72,55 +72,61 @@
   }
 </script>
 
-{#if todaysActivities.length > 0}
-  <Grouper items={todaysActivities} {groupForItem} let:group let:item>
-    <div slot="group">
-      <div class="caption">
-        <div>{dayjs(date).format('DD/MM/YYYY')}</div>
-        <div>{group}s</div>
-        <div>Total: {total}</div>
+<div class="daily-activities">
+  {#if todaysActivities.length > 0}
+    <Grouper items={todaysActivities} {groupForItem} let:group let:item>
+      <div slot="group">
+        <div class="caption">
+          <div>{dayjs(date).format('DD/MM/YYYY')}</div>
+          <div>{group}s</div>
+          <div>Total: {total}</div>
+        </div>
       </div>
-    </div>
-    <tr slot="item" class="count">
-      <td>{item.quantity}</td>
-      <td>{item.label}</td>
-      <td>{dayjs(item.added).format('h:mm:ss A')}</td>
-    </tr>
-  </Grouper>
-{:else}
-  <div>No activities 👟</div>
-{/if}
+      <tr slot="item" class="count">
+        <td>{item.quantity}</td>
+        <td>{item.label}</td>
+        <td>{dayjs(item.added).format('h:mm:ss A')}</td>
+      </tr>
+    </Grouper>
+  {:else}
+    <div>No activities 👟</div>
+  {/if}
 
-{#if isToday}
-  <div class="activity-bar-container">
-    <div class="activity-bar {posting ? 'disabled' : ''}">
-      <div>
-        <input
-          class="activity-bar-focus"
-          inputmode="decimal"
-          min="1"
-          bind:value={reps} />
-      </div>
-      <div>
-        <select class="activity-bar-focus" bind:value={selectedActivity}>
-          {#each activities as activity (activity.id)}
-            <option value={activity.id}>{activity.label}</option>
-          {/each}
-        </select>
-      </div>
-      <div>
-        <button
-          class="activity-bar-focus"
-          on:click={handleAdd}
-          disabled={posting}>
-          add
-        </button>
+  {#if isToday}
+    <div class="activity-bar-container">
+      <div class="activity-bar {posting ? 'disabled' : ''}">
+        <div>
+          <input
+            class="activity-bar-focus"
+            inputmode="decimal"
+            min="1"
+            bind:value={reps} />
+        </div>
+        <div>
+          <select class="activity-bar-focus" bind:value={selectedActivity}>
+            {#each activities as activity (activity.id)}
+              <option value={activity.id}>{activity.label}</option>
+            {/each}
+          </select>
+        </div>
+        <div>
+          <button
+            class="activity-bar-focus"
+            on:click={handleAdd}
+            disabled={posting}>
+            add
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-{/if}
+  {/if}
+</div>
 
 <style>
+  .daily-activities {
+    padding-top: 2rem;
+  }
+
   .activity-bar-container {
     position: fixed;
     left: 0;
