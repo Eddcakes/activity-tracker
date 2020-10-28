@@ -12,8 +12,9 @@
   };
   function getValue(id) {
     const value = id.split("date-btn")[1];
-    return value;
+    return parseInt(value, 10);
   }
+
   $: date = () => {
     //work out the date to pass to date component
     //can we do somethign with todayNumber and selected
@@ -25,6 +26,7 @@
       return dayjs().subtract(todayNumber - selected, "day");
     }
   };
+
   $: todaysData = data.filter((activity) =>
     dayjs(activity.added).isSame(dayjs(date()), "day")
   );
