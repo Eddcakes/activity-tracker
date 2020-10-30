@@ -20,15 +20,19 @@
 
 <div class="daily-activities">
   {#if todaysActivities.length > 0}
-    <Grouper items={todaysActivities} {groupForItem} let:group let:item>
-      <div slot="group">
-        <div class="caption">
-          <div>{dayjs(date).format('DD/MM/YYYY')}</div>
-          <div>{group}s</div>
-          <div>Total: {total}</div>
-        </div>
-      </div>
+    <Grouper
+      items={todaysActivities}
+      {groupForItem}
+      let:group
+      let:item
+      let:index>
+      <caption slot="group">
+        <span>{dayjs(date).format('DD/MM/YYYY')}</span>
+        <span>{group}s</span>
+        <span>Total: {total}</span>
+      </caption>
       <tr slot="item" class="count">
+        <td>{index + 1}</td>
         <td>{item.quantity}</td>
         <td>{item.label}</td>
         <td>{dayjs(item.added).format('h:mm:ss A')}</td>
@@ -39,7 +43,7 @@
   {/if}
 
   {#if isToday}
-    <ActivityBar />
+    <ActivityBar on:message />
     <div class="scroll-helper" />
   {/if}
 </div>
@@ -49,18 +53,14 @@
     padding-top: 2rem;
   }
 
-  .caption {
-    display: flex;
-    justify-content: space-between;
+  caption {
     font-weight: 600;
     padding: 1em;
     border-radius: 0.25em;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    margin: auto;
-    max-width: 50%;
   }
 
-  .caption:hover {
+  caption:hover {
     background-color: #ffc394;
     cursor: pointer;
   }
@@ -71,15 +71,6 @@
 
   tr {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
-
-  /* Grouper component has rowNumber counter reset */
-  tr::before {
-    display: table-cell;
-    counter-increment: rowNumber;
-    content: counter(rowNumber);
-    padding-right: 1em;
-    padding-left: 1em;
   }
 
   td {
