@@ -8,11 +8,6 @@
   export let todaysActivities;
   export let date;
 
-  $: total = todaysActivities.reduce(
-    (acc, current) => (acc += current.quantity),
-    0
-  );
-
   function groupForItem(item) {
     return item.label;
   }
@@ -24,6 +19,7 @@
       items={todaysActivities}
       {groupForItem}
       let:group
+      let:total
       let:item
       let:index>
       <caption slot="group">

@@ -26,10 +26,6 @@
 
     items.forEach((item) => {
       const itemGroup = groupForItem(item); //returns items label (group)
-      /*creates new group when last group is null
-        or last group is different group
-      */
-
       if (lastGroup === null || lastGroup != itemGroup) {
         lastGroup = itemGroup;
         group = {
@@ -39,6 +35,13 @@
         groupedItems.push(group);
       }
       group.items.push(item);
+    });
+    // set total
+    groupedItems.forEach((group) => {
+      group.total = group.items.reduce(
+        (acc, current) => (acc += current.quantity),
+        0
+      );
     });
     return groupedItems;
   }
@@ -51,10 +54,16 @@
 
 <!-- https://pace.dev/blog/2020/02/01/grouper-component-for-svelte-by-mat-ryer.html -->
 {#each groupedItems as groupedItem}
-  <table>
-    <slot name="group" group={groupedItem.group} />
+  <table style="margin: auto;">
+    <slot name="group" group={groupedItem.group} total={groupedItem.total} />
     {#each groupedItem.items as item, index (item.added)}
       <slot name="item" {item} {index} />
     {/each}
   </table>
 {/each}
+
+<!--
+  had to resort to style tag because for somereason styles added to this table doesnt apply
+  from class or table {} in style tags
+  the class is applied but have no styles... 😢
+-->
