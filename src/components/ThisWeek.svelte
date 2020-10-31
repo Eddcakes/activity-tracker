@@ -1,12 +1,19 @@
 <script>
   import Day from "./Day.svelte";
   import dayjs from "dayjs";
+  import DateButton from "./DateButton.svelte";
   export let data;
   export let selected;
   export let todayNumber;
 
   const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-  const onClick = (evt) => (selected = evt.target.value);
+  const onClick = (evt) => {
+    selected = getValue(evt.target.id);
+  };
+  function getValue(id) {
+    const value = id.split("date-btn")[1];
+    return parseInt(value, 10);
+  }
 
   $: date = () => {
     //work out the date to pass to date component
@@ -19,25 +26,30 @@
       return dayjs().subtract(todayNumber - selected, "day");
     }
   };
+
   $: todaysData = data.filter((activity) =>
     dayjs(activity.added).isSame(dayjs(date()), "day")
   );
 </script>
 
-<div>
-  <ul>
-    {#each days as day, index}
-      <li
-        class:today={index === todayNumber}
-        class:selected={index === selected}
-        on:click={onClick}
-        value={index}>
-        {index === todayNumber ? `${dayjs().format('DD')} ${day}` : `${dayjs()
-              .add(index - todayNumber, 'day')
-              .format('DD')} ${day}`}
-      </li>
-    {/each}
-  </ul>
+<div class="container">
+  <div class="day-bar">
+    <ul>
+      {#each days as day, index}
+        <li>
+          <DateButton
+            handleClick={onClick}
+            {todayNumber}
+            {index}
+            current={selected}
+            text={index === todayNumber ? `${dayjs().format('DD')} ${day}` : `${dayjs()
+                  .add(index - todayNumber, 'day')
+                  .format('DD')} ${day}`} />
+        </li>
+      {/each}
+    </ul>
+  </div>
+
   <Day
     isToday={todayNumber === selected}
     todaysActivities={todaysData}
@@ -46,8 +58,13 @@
 </div>
 
 <style>
-  div {
+  .container {
     text-align: center;
+  }
+
+  .day-bar {
+    display: flex;
+    overflow-x: hidden;
   }
 
   ul {
@@ -55,32 +72,30 @@
     padding: 0;
     list-style: none;
     display: flex;
-    justify-content: space-between;
-    user-select: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
   }
 
+  /* mfw galaxy fold */
   li {
-    margin: 0;
-    text-transform: uppercase;
-    width: 3em;
-    height: 3em;
-    line-height: 1.1em;
-    border: solid 1px transparent;
-    font-size: 1em;
-    word-spacing: 5em;
+    margin-right: 0.1rem;
+    margin-left: 0.1rem;
   }
+  @media screen and (min-width: 320px) {
+    li {
+      margin-right: 0.4rem;
+      margin-left: 0.4rem;
+    }
+  }
+  @media screen and (min-width: 500px) {
+    ul {
+      flex-wrap: none;
+      justify-content: space-between;
+    }
 
-  li:hover {
-    cursor: pointer;
-  }
-
-  .today {
-    font-weight: 700;
-  }
-  /* could we add a sliding animation for the highlight */
-  .selected {
-    background-color: aliceblue;
-    border: solid 1px aquamarine;
-    border-radius: 100%;
+    li {
+      margin: 0;
+    }
   }
 </style>

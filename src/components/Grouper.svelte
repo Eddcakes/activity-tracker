@@ -3,24 +3,29 @@
   export let groupForItem = () => "Group name"; //default value
   let groupedItems = null;
 
+  const byActivity = (a, b) => {
+    if (a.label < b.label) {
+      return -1;
+    }
+    if (a.label > b.label) {
+      return 1;
+    }
+    return 0;
+  };
+
+  $: sortedItems = items.sort(byActivity);
+
   $: if (items) {
-    groupedItems = groupAll(items);
+    groupedItems = groupAll(sortedItems);
   }
 
   function groupAll(items) {
     let groupedItems = [];
     let lastGroup = null;
     let group = null;
-    //let existingGroups = [];
-
-    //doesnt quite work how i want, only groups if last item - i want to group all items of same category
 
     items.forEach((item) => {
       const itemGroup = groupForItem(item); //returns items label (group)
-      /*creates new group when last group is null
-        or last group is different group
-      */
-
       if (lastGroup === null || lastGroup != itemGroup) {
         lastGroup = itemGroup;
         group = {
@@ -30,18 +35,13 @@
         groupedItems.push(group);
       }
       group.items.push(item);
-
-      /*  wip need to change grouper functionality
-      if (lastGroup === null || !existingGroups.includes(itemGroup)) {
-        lastGroup = itemGroup;
-        existingGroups.push(itemGroup);
-        group = {
-          group: itemGroup,
-          items: [],
-        };
-        groupedItems.push(group);
-      }
-      group.items.push(item); */
+    });
+    // set total
+    groupedItems.forEach((group) => {
+      group.total = group.items.reduce(
+        (acc, current) => (acc += current.quantity),
+        0
+      );
     });
     return groupedItems;
   }
@@ -54,22 +54,16 @@
 
 <!-- https://pace.dev/blog/2020/02/01/grouper-component-for-svelte-by-mat-ryer.html -->
 {#each groupedItems as groupedItem}
-  <slot name="group" group={groupedItem.group} />
-  <table>
-    {#each groupedItem.items as item}
-      <slot name="item" {item} />
+  <table style="margin: auto;">
+    <slot name="group" group={groupedItem.group} total={groupedItem.total} />
+    {#each groupedItem.items as item, index (item.added)}
+      <slot name="item" {item} {index} />
     {/each}
   </table>
 {/each}
 
-<style>
-  table {
-    margin-left: auto;
-    margin-right: auto;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-top: none;
-    border-collapse: collapse;
-    margin-bottom: 1em;
-    counter-reset: rowNumber;
-  }
-</style>
+<!--
+  had to resort to style tag because for somereason styles added to this table doesnt apply
+  from class or table {} in style tags
+  the class is applied but have no styles... 😢
+-->

@@ -86,13 +86,13 @@
   <title>Tracker</title>
 </svelte:head>
 
-<main>
+<div>
   <ThisWeek
     selected={dayNumber}
     data={thisWeek}
     todayNumber={dayNumber}
     on:message={handleMessage} />
-</main>
+</div>
 
 <style>
 
