@@ -5,3 +5,5 @@ yarn-error.log
 /__sapper__/
 env.json
 /docker
+init.sql
+.env
